@@ -1,43 +1,109 @@
-cmake_minimum_required(VERSION 3.4)
+#
+# Copyright (c) 2019, New York University
+#
+# License BSD-3 clause
+#
 
-project(libfranka-examples CXX)
+#
+# set up the project
+#
+cmake_minimum_required(VERSION 3.10.2)
 
-list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake)
+project(dgm_fr3_dyn)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-if(NOT FRANKA_IS_FOUND)
-    find_package(Franka REQUIRED)
+# Using C++17
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
 endif()
-find_package(Eigen3 REQUIRED)
-find_package(Poco REQUIRED COMPONENTS Foundation)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+#
+# Dependencies 
+#
+
+# In order to quiet the find_package(dynamic-graph[-python] REQUIRED)
+set(CHECK_MINIMAL_CXX_STANDARD ON)
+
+set(Python_ADDITIONAL_VERSIONS 3.6)
+# build dep
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(mpi_cmake_modules REQUIRED)
+find_package(mim_msgs REQUIRED)
+# dependencies 
+find_package(lcm REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(dynamic_graph_manager REQUIRED)
+find_package(yaml_utils REQUIRED)
+find_package(Franka REQUIRED)
 find_package(Threads REQUIRED)
 
+find_package(Eigen3 REQUIRED)
+find_package(Poco REQUIRED COMPONENTS Foundation)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-add_library(examples_common STATIC
-  src/examples_common.cpp
-)
-# target_include_directories(examples_common PUBLIC /include)
-include_directories(/include)
-target_link_libraries(examples_common PUBLIC Franka::Franka Eigen3::Eigen3)
+find_package(Threads REQUIRED)
+find_package(real_time_tools REQUIRED)
+# find_package(ddp_mpc REQUIRED)
+# Standard dependencies
+find_package(Eigen3 REQUIRED)
+# LAAS dependencies
+find_package(dynamic-graph REQUIRED)
+find_package(dynamic-graph-python REQUIRED)
 
-set(EXAMPLES
-  joint_impedance_control
-)
+# Export de dependencies.
+ament_export_dependencies(
+  ament_cmake
+  ament_cmake_python
+  mpi_cmake_modules
+  mim_msgs
+  ament_index_cpp
+  dynamic_graph_manager
+  yaml_utils
+  real_time_tools
+  lcm
+  Eigen3
+  dynamic-graph
+  dynamic-graph-python) 
 
-foreach(example ${EXAMPLES})
-  add_executable(${example} src/${example}.cpp)
-  # target_include_directories(${example} PUBLIC /include)
-  target_link_libraries(${example} Franka::Franka examples_common Eigen3::Eigen3)
-endforeach()
+# prepare the final export
+ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
-target_link_libraries(joint_impedance_control Threads::Threads)
+#
+# Install the python package.
+#
+# ament_python_install_package(${PROJECT_NAME} PACKAGE_DIR python/${PROJECT_NAME})
 
-include(GNUInstallDirs)
-install(TARGETS ${EXAMPLES}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+#
+# Manage the creation of the libraries and executables.
+#
+add_subdirectory(src)
+
+# #
+# # Manage the unit tests.
+# #
+# if(BUILD_TESTING)
+#   add_subdirectory(tests)
+# endif()
+
+# #
+# # Manage the demos.
+# #
+# add_subdirectory(demos)
+
+#
+# Install the package includes.
+#
+install(DIRECTORY include/ DESTINATION include)
+
+#
+# Building documentation.
+#
+add_documentation()
+
+#
+# Export as an ament_package
+#
+ament_package()

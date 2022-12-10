@@ -1,0 +1,5 @@
+package exlcm;
+struct ipc_trigger_t
+{
+    int64_t  timestamp;
+}
