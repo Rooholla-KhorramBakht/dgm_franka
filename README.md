@@ -37,7 +37,7 @@ git clone git@github.com:Rooholla-KhorramBakht/treep_projects.git
 Having the above repository in the working directory, we can use the treep command to clone the required repositories as follows:
 
 ```bash
-treep --clone FRANKA_DGM
+treep --clone DGM_FRANKA
 ```
 the command above creates a `workspace/src` directory tree. Having this, we can start the compilation process using colcon. But before that, source the ROS and openrobotics installation scrips:
 
