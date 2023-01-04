@@ -6,21 +6,16 @@ Frist install the following packages:
 
 Furthermore, install the prerequisit packages as follows:
 ```bash
-sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essentials freeglut3 freeglut3-dev libedit-dev libtinyxml2-dev
-pip install lark catkin_pkg nose==1.3.7
-
-# A fix for ROS
-pip uninstall em
-pip install empy 
+sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essential freeglut3 freeglut3-dev libedit-dev libtinyxml2-dev
 # Source the ros installation
-source /opt/ros/foxy/setup.bash # Source the ros install scrips if not done so far
+source /opt/ros/foxy/setup.bash 
 ```
 
 We assume that a virtual envrionement with python3 as the interperter has been created and activated during the build process. A simple and lieght-weight solution for this is to use the virtualenvwrapper as follows:
 
 
 ```bash
-pip install virtualenvwrapper
+pip3 install virtualenvwrapper
 export WORKON_HOME=~/Envs
 mkdir -p $WORKON_HOME
 source ~/.local/bin/virtualenvwrapper.sh
@@ -29,10 +24,18 @@ source ~/.local/bin/virtualenvwrapper.sh
 Then, create a viruatl enviroment with python3 as the interpreter:
 
 ```bash
-mkvirtualenv -p python3 p3_env
-workon p3_env 
+mkvirtualenv -p python3 dgm_env
+workon dgm_env 
 ```
 
+Install the following packages within the virtual envrionment:
+
+```bash
+pip install lark catkin_pkg nose==1.3.7 numpy
+# A fix for ROS
+pip uninstall em
+pip install empy 
+```
 Now, use treep to clone the related repositories to the dynamic-graph-manager project:
 
 ```bash
