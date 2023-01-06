@@ -11,7 +11,7 @@ As shown bellow, the dynamic graph provides a powerful and conceptually easy to 
 
 ![DG_Conecept](doc/Dynamic-Graph.drawio.png)
 
-Dynamic graph is built around a shared memory and several computation and data management threads that interchange information between each other in a harmony defined by network of interprocess synchronization mechanisms (showed by dashed paths in [Fig1](#DGM_Franka)) Dynamic Graph manager may be used in two different ways:
+Dynamic graph is built around a shared memory and several computation and data management threads that interchange information between each other in a harmony defined by network of interprocess synchronization mechanisms. Dynamic Graph manager may be used in two different ways:
 
 - Defining computation nodes in C++ and hooking them up together (either through python or C++ API) to define a graph that represents the control system of the robot. 
 
