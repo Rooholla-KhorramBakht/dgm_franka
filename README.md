@@ -1,6 +1,6 @@
 # Dynamic Graph Manager for Franka Emika
 
-![DGM_Franka](doc/DGMFranka.drawio.png)
+![#DGM_Franka](doc/DGMFranka.drawio.png)
 This repository holds the implementation of dynamic graph manager interface for the Franka Emika 7-DoF robot arm.
 
 ## What Is This?
