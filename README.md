@@ -1,4 +1,4 @@
-# Dynamic Graph Manager Interface for Franka Emika Robot
+# Dynamic Graph Manager for Franka Emika
 This repository holds the implementation of dynamic graph manager interface for the Franka Emika 7-DoF robot arm.
 
 ## What Is This?
