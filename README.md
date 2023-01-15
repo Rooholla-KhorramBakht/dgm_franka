@@ -32,7 +32,8 @@ First, install the ROS foxy as explained [here](https://docs.ros.org/en/foxy/Ins
 
 ```bash
 sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essential libboost-all-dev\
-freeglut3 freeglut3-dev libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose
+freeglut3 freeglut3-dev libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose python-all-dev
+
 # Source the ros installation
 source /opt/ros/foxy/setup.bash 
 ```
