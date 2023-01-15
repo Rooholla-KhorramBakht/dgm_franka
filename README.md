@@ -31,7 +31,7 @@ As opposed to the original dynamic graph manager project, this repository uses a
 First, install the ROS foxy as explained [here](https://docs.ros.org/en/foxy/Installation.html). Then, install the following prerequisite packages:
 
 ```bash
-sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essential\
+sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essential libboost-all-dev\
 freeglut3 freeglut3-dev libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose
 # Source the ros installation
 source /opt/ros/foxy/setup.bash 
