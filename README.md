@@ -69,7 +69,7 @@ We use [treep](https://pypi.org/project/treep/) to manage the repositories used 
 
 ```bash
 mkdir ~/dgm-ws && cd ~/dgm-ws
-git clone git@github.com:Rooholla-KhorramBakht/treep_projects.git
+git clone https://github.com/Rooholla-KhorramBakht/treep_projects.git
 treep --clone DYNAMIC_GRAPH_MANAGER
 ```
 
