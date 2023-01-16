@@ -67,9 +67,13 @@ endmacro(create_dgm_executable robot_name)
 # build the DGMs and the executable
 #
 
-
+#Dynamic Interface
 create_dgm_library(fr3_dyn)
 create_dgm_executable(fr3_dyn)
+
+#Kinematic Interface
+create_dgm_library(fr3_kin)
+create_dgm_executable(fr3_kin)
 
 install(
   TARGETS ${all_src_targets}
