@@ -27,6 +27,4 @@ RUN mkdir /home/data && cd /home/data && source /opt/ros/foxy/setup.bash && sour
 RUN cd /opt/ && wget https://github.com/coder/code-server/releases/download/v4.9.1/code-server_4.9.1_amd64.deb
 RUN dpkg -i /opt/code-server_4.9.1_amd64.deb && rm /opt/code-server_4.9.1_amd64.deb
 
-COPY code_server_config.yaml ~/.config/code-server/config.yaml
-
 CMD source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3/dist-packages/ && code-server  --auth none /home/
