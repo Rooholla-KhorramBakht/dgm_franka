@@ -1,4 +1,4 @@
-FROM robocaster/dockerobot-base:v1.0
+FROM robocaster/dockerobots-control:amd64
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y ros-foxy-rosidl-generator-cpp libcereal-dev build-essential libboost-all-dev freeglut3 freeglut3-dev \
