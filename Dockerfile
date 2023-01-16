@@ -5,13 +5,14 @@ RUN apt-get update && apt-get install -y ros-foxy-rosidl-generator-cpp libcereal
 libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose python3-pip libglib2.0-dev libxmu-dev libpoco-dev libeigen3-dev python-all-dev\
  curl unzip 
 
- # Compile and Install LCM
-RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install 
+# Compile and Install LCM
+#RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install 
 
 # Compile and Install Dynamic Graph Manager
 RUN python3 -m pip install treep lark catkin_pkg nose==1.3.7 empy
 
 RUN  cd /root && source /opt/ros/foxy/setup.bash && mkdir /root/dgm-ws && cd ~/dgm-ws && git clone https://github.com/Rooholla-KhorramBakht/treep_projects.git && treep --clone DYNAMIC_GRAPH_MANAGER && colcon build && source install/setup.bash
+RUN echo 'source /root/dgm-ws/install/setup.bash' >> ~/.bashrc
 
 # Compile and install libfranka
 WORKDIR /root
@@ -27,4 +28,4 @@ RUN mkdir /home/data && cd /home/data && source /opt/ros/foxy/setup.bash && sour
 RUN cd /opt/ && wget https://github.com/coder/code-server/releases/download/v4.9.1/code-server_4.9.1_amd64.deb
 RUN dpkg -i /opt/code-server_4.9.1_amd64.deb && rm /opt/code-server_4.9.1_amd64.deb
 
-CMD source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3/dist-packages/ && code-server  --auth none /home/
+CMD code-server  --auth none /home/
