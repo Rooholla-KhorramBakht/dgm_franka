@@ -27,7 +27,7 @@ As opposed to the original [DGM project](https://github.com/machines-in-motion/d
 
 ## Installation
 ### Using Docker (Recommended)
-The simplify the whole process, we have created a Dockerfile that can be used to create an isolcated container with all the required toolsets for running the DGM. We have also included a code-server and jupyter notebook to simplify the development process. 
+The simplify the whole process, we have created a Dockerfile that can be used to create an isolated container with all the required tool sets for running the DGM. We have also included a code-server and jupyter notebook to simplify the development process. 
 
 You can build your own image or you can pull our pregenerated image on Dockerhub:
 
@@ -43,7 +43,7 @@ docker run -it --network host --privileged --volume "$(pwd)":/root/host_dgm_fran
 
 Note that the container should run on a host computer with Preempt-RT kernel ([installation guid](https://frankaemika.github.io/docs/installation_linux.html)) and with `--previledged` execution mode and access tho host network through setting the `--network` to host.
 
-Running the container starts a VSCode server that can be accessed through the `localhost` IP address and port 8080. Within the VSCode space, the user can launch the jupter notebook server and access it through another tab. 
+Running the container starts a VSCode server that can be accessed through the `localhost` IP address and port 8080. Within the VSCode space, the user can launch the Jupter notebook server and access it through another tab. 
 ### From Source
 
 First, install ROS foxy as explained [here](https://docs.ros.org/en/foxy/Installation.html) and source it in the working terminal. Then, install the following prerequisite packages:
