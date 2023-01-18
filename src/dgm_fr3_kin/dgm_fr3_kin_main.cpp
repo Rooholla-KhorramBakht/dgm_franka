@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
                 const franka::RobotState& state, franka::Duration /*period*/) -> franka::JointVelocities {
       //Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> duration = stamp_now - stamp_start;
+      std::chrono::duration<double> duration = stamp_now .time_since_epoch();//- stamp_start;
       
       //Send the sensor data to the DGM
       dgm.franka_update_sensors(state, duration.count());
@@ -139,11 +139,11 @@ int main(int argc, char** argv) {
 
       // //How recent is the computed control command?
       double control_lag = duration.count() -control_stamp;
-
+      std::cout << control_lag << std::endl;
       std::array<double, 7> vel_d_calculated;
       
       // Apply the control command to the robot only if the command is recent enough
-      if(control_lag < 0.1)
+      if(abs(control_lag) < 0.1)
       {
         // std::cout << 1 << std::endl;
         for (size_t i = 0; i < 7; i++) {
@@ -152,12 +152,10 @@ int main(int argc, char** argv) {
       }
       else
       {
-        // std::cout << 0 << std::endl;
         for (size_t i = 0; i < 7; i++) {
           vel_d_calculated[i] = 0;
         }
       }
-      
       // The following line is only necessary for printing the rate limited torque. As we activated
       // rate limiting for the control loop (activated by default), the torque would anyway be
       // adjusted!

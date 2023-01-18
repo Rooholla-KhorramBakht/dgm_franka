@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
                 const franka::RobotState& state, franka::Duration /*period*/) -> franka::Torques {
       //Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> duration = stamp_now - stamp_start;
+      std::chrono::duration<double> duration = stamp_now.time_since_epoch();// - stamp_start;
       
       //Send the sensor data to the DGM
       dgm.franka_update_sensors(state, duration.count());
