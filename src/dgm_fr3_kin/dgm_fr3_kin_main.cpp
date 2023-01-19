@@ -139,7 +139,6 @@ int main(int argc, char** argv) {
 
       // //How recent is the computed control command?
       double control_lag = duration.count() -control_stamp;
-      std::cout << control_lag << std::endl;
       std::array<double, 7> vel_d_calculated;
       
       // Apply the control command to the robot only if the command is recent enough
