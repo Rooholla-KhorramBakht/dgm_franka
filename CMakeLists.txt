@@ -25,13 +25,13 @@ find_package(ament_index_cpp REQUIRED)
 find_package(dynamic_graph_manager REQUIRED)
 find_package(yaml_utils REQUIRED)
 find_package(Franka REQUIRED)
-find_package(Threads REQUIRED)
 
 find_package(Eigen3 REQUIRED)
 find_package(Poco REQUIRED COMPONENTS Foundation)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+
 find_package(real_time_tools REQUIRED)
 
 # LAAS dependencies
