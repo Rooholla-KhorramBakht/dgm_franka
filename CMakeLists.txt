@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(dgm_fr3_dyn)
+project(dgm_franka)
 
 # Using C++17
 if(NOT CMAKE_C_STANDARD)
