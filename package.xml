@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
 
-  <name>dgm_fr3_dyn</name>
+  <name>dgm_franka</name>
   <version>1.0.0</version>
 
   <description>
@@ -13,10 +13,7 @@
   <license>TODO</license>
   
   <author email="rk4342@nyu.edu">Rooholla Khorrambakht</author>
-  <author email="pfleginj@ethz.ch">Johannes Pfleging</author>
-  <author email="jviereck@tuebingen.mpg.de">Julian Viereck</author>
-  <author email="sk8001@nyu.edu">Sebastien Kleff</author>
-  <author email="mnaveau@tuebingen.mpg.de">Maximilien Naveau</author>
+  <author email="bd1555@nyu.edu">Bolun Dai</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
