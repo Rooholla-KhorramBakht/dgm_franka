@@ -28,8 +28,9 @@ void setDefaultBehavior(franka::Robot& robot);
  * Wisama Khalil and Etienne Dombre. 2002. Modeling, Identification and Control of Robots
  * (Kogan Page Science Paper edition).
  */
-class MotionGenerator {
- public:
+class MotionGenerator
+{
+public:
   /**
    * Creates a new MotionGenerator instance for a target q.
    *
@@ -48,7 +49,7 @@ class MotionGenerator {
    */
   franka::JointPositions operator()(const franka::RobotState& robot_state, franka::Duration period);
 
- private:
+private:
   using Vector7d = Eigen::Matrix<double, 7, 1, Eigen::ColMajor>;
   using Vector7i = Eigen::Matrix<int, 7, 1, Eigen::ColMajor>;
 
