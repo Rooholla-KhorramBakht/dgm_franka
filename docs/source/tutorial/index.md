@@ -6,5 +6,6 @@ We provide a list of tutorials to assist the integration of `dgm_franka`.
 :hidden:
 
 minimal
+install
 dg_head
 ```

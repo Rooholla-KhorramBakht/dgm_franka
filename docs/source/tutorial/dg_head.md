@@ -48,3 +48,4 @@ for i in range(100000):
     franka_dgh.cmd = vel
     franka_dgh.write_command(vel)
 ```
+
