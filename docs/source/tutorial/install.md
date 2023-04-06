@@ -42,7 +42,7 @@ Now that the package is built, we can install it anywhere we want
 cmake --install . --prefix "<install-dir>/install"
 ```
 
-Move the `lcm_msgs` package within the `notebooks` folder to somewhere Python can easily find it. My suggestion is to move it to `/usr/local/lib/python3.<x>/site-packages`. Finally, add the path to `dynamic_graph_manager_cpp_bindings` to `PYTHONPATH`, it should be located at `~/dgm-ws/install/dynamic_graph_manager/lib/python3.8/site-packages`.
+Finally, add the path to `dynamic_graph_manager_cpp_bindings` to `PYTHONPATH`, it should be located at `~/dgm-ws/install/dynamic_graph_manager/lib/python3.8/site-packages`.
 
 ## Install `dgh_franka`
 
