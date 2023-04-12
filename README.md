@@ -46,7 +46,7 @@ Note that the container should run on a host computer with Preempt-RT kernel ([i
 Running the container starts a VSCode server that can be accessed through the `localhost` IP address and port 8080. Within the VSCode space, the user can launch the Jupter notebook server and access it through another tab. 
 ### From Source
 
-First, install ROS foxy as explained [here](https://docs.ros.org/en/foxy/Installation.html) and source it in the working terminal. Then, install the following prerequisite packages:
+First, install ROS foxy as explained [here](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html) and source it in the working terminal. Then, install the following prerequisite packages:
 
 ```bash
 sudo apt-get install ros-foxy-rosidl-generator-cpp libcereal-dev build-essential libboost-all-dev\
