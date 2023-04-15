@@ -122,7 +122,7 @@ int main(int argc, char** argv)
 
     // Define callback for control loop.
     std::function<franka::JointVelocities(const franka::RobotState&, franka::Duration)> control_callback =
-        [&trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
+        [&params, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
          &stamp_start](const franka::RobotState& state, franka::Duration /*period*/) -> franka::JointVelocities {
       // Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
       // Send an IPC trigger to serve as a time source for the python controller
       trigger_msg.timestamp =
           std::chrono::duration_cast<std::chrono::microseconds>(stamp_now.time_since_epoch()).count();
-      lcm.publish("dgm_franka_control_trigger", &trigger_msg);
+      lcm.publish(param["device"]["name"].as<std::string>() + "_trigger", &trigger_msg);
       // Trigger the DGM to read the sensor and update the shared memory with the control command
       dgm.hw_trigger();
       dgm.wait_for_control();
