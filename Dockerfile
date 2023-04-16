@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends ros-foxy-rosidl-generator-cpp libcereal-dev build-essential libboost-all-dev freeglut3 freeglut3-dev \
     libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose python3-pip libglib2.0-dev libxmu-dev libpoco-dev libeigen3-dev python-all-dev\
-    curl unzip
+    curl unzip wget
 
 RUN python3 -m pip install scipy pyzmq matplotlib
 RUN apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-pinocchio pybind11-dev protobuf-compiler 
