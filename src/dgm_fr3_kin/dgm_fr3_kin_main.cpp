@@ -122,7 +122,7 @@ int main(int argc, char** argv)
 
     // Define callback for control loop.
     std::function<franka::JointVelocities(const franka::RobotState&, franka::Duration)> control_callback =
-        [&params, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
+        [&param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
          &stamp_start](const franka::RobotState& state, franka::Duration /*period*/) -> franka::JointVelocities {
       // Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
