@@ -1,0 +1,17 @@
+package fr3_joint;
+
+struct fr3_joint_dyn
+{
+    int64_t  timestamp;
+    double   q[7];
+    double   dq[7]; 
+    double   torque_cmd[7]; 
+}
+
+struct fr3_joint_kin
+{
+    int64_t  timestamp;
+    double   q[7];
+    double   dq[7]; 
+    double   vel_cmd[7]; 
+}
