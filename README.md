@@ -109,3 +109,22 @@ Before running the notebooks, start the dynamic graph manager for the dynamic or
 ```
 
 Then, follow the instructions provided in the notebooks and try out the demo controllers.
+
+## Citation
+
+To cite `dgm_franka` in your academic research, please use the following bibtex
+
+```bibtex
+@article{DaiKKGTK23,
+    author      = {Bolun Dai and
+                   Rooholla Khorrambakht and
+                   Prashanth Krishnamurthy and
+                   Vinícius Gonçalves and
+                   Anthony Tzes and
+                   Farshad Khorrami},
+    title       = {Safe Navigation and Obstacle Avoidance Using Differentiable Optimization Based Control Barrier Functions},
+    journal     = {CoRR},
+    volume      = {abs/2304.08586},
+    year        = {2023},
+}
+```
