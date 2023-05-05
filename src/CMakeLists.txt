@@ -40,19 +40,29 @@ macro(create_dgm_executable ROBOT_NAME)
 endmacro(create_dgm_executable ROBOT_NAME)
 
 # For installing the shared memory config files
-set(SM_CONFIG_SOURCE_DIR "${PROJECT_SOURCE_DIR}/shared_memory_configs")
+set(IF_CONFIG_SOURCE_DIR "${PROJECT_SOURCE_DIR}/interface_configs")
 set(SM_CONFIG_INSTALL_DESTINATION "share/${PROJECT_NAME}")
 
 # Dynamic Interface
-create_dgm_library(fr3_dyn)
-create_dgm_executable(fr3_dyn)
-install(FILES ${SM_CONFIG_SOURCE_DIR}/franka_dynamic_interface.yaml 
+create_dgm_library(fr3_joint_dyn)
+create_dgm_executable(fr3_joint_dyn)
+install(FILES ${IF_CONFIG_SOURCE_DIR}/fr3_joint_dyn_interface.yaml 
         DESTINATION ${SM_CONFIG_INSTALL_DESTINATION})
 
 # Kinematic Interface
-create_dgm_library(fr3_kin)
-create_dgm_executable(fr3_kin)
-install(FILES ${SM_CONFIG_SOURCE_DIR}/franka_kinematic_interface.yaml 
+create_dgm_library(fr3_joint_kin)
+create_dgm_executable(fr3_joint_kin)
+install(FILES ${IF_CONFIG_SOURCE_DIR}/fr3_joint_kin_interface.yaml 
+        DESTINATION ${SM_CONFIG_INSTALL_DESTINATION})
+
+create_dgm_library(fr3_task_pose)
+create_dgm_executable(fr3_task_pose)
+install(FILES ${IF_CONFIG_SOURCE_DIR}/fr3_task_pose_interface.yaml 
+        DESTINATION ${SM_CONFIG_INSTALL_DESTINATION})
+
+create_dgm_library(fr3_task_vel)
+create_dgm_executable(fr3_task_vel)
+install(FILES ${IF_CONFIG_SOURCE_DIR}/fr3_task_vel_interface.yaml 
         DESTINATION ${SM_CONFIG_INSTALL_DESTINATION})
 
 # install both the libraries and the executables

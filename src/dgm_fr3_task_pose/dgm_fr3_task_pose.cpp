@@ -1,4 +1,4 @@
-#include "dgm_fr3_kin.hh"
+#include "dgm_fr3_task_pose.hh"
 
 namespace dynamic_graph_manager
 {
@@ -30,7 +30,7 @@ void DGMFrankaKin::get_sensors_to_map(VectorDGMap& map)
 
 void DGMFrankaKin::set_motor_controls_from_map(const VectorDGMap& map)
 {
-  desired_velocities_ = map.at("ctrl_joint_velocities");
+  desired_velocities_ = map.at("ctrl_task_pose");
   ctrl_stamp_ = map.at("ctrl_stamp")[0];
 }
 

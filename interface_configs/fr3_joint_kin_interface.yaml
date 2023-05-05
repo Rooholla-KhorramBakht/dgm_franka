@@ -1,0 +1,30 @@
+# Common parameters
+debug_timer_history_length: 10000 # Optional
+is_real_robot: true
+
+# Dynamic graph device:
+device:
+  name: "franka_dynamic"
+  sensors:
+    timestamp:
+      size: 1
+    joint_positions:
+      size: 7
+    joint_velocities:
+      size: 7
+    joint_torques:
+      size: 7
+  controls:
+    ctrl_stamp:
+      size: 1
+    ctrl_joint_velocities:
+      size: 7
+
+# Hardware communication process
+hardware_communication:
+  # Disable the internal timer of the DGM and use Franka timer instead? Set false if yes
+  timer_triggered: false 
+  maximum_time_for_user_cmd: 100000
+  max_missed_control: 10
+  control_period: 500000 # 0.5ms is the control loop or the max time allocated for the computation of the commands in the hardware triggered mode
+  shared_memory_name: "DGM_ShM"
