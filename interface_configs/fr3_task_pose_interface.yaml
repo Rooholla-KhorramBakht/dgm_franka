@@ -18,7 +18,7 @@ device:
     ctrl_stamp:
       size: 1
     ctrl_task_pose:
-      size: 6
+      size: 16 # Column major 4x4 transformation matrix
 
 # Hardware communication process
 hardware_communication:
