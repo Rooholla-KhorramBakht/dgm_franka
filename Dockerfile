@@ -11,8 +11,7 @@ RUN python3 -m pip install scipy pyzmq matplotlib
 RUN apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-pinocchio pybind11-dev protobuf-compiler 
 
 # Compile and Install LCM
-RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install 
-
+RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install
 
 # Compile and Install Dynamic Graph Manager
 RUN python3 -m pip install treep lark catkin_pkg nose==1.3.7 empy
@@ -24,8 +23,11 @@ RUN echo 'source /root/dgm-ws/install/setup.bash' >> ~/.bashrc
 WORKDIR /root
 RUN git clone --recursive https://github.com/frankaemika/libfranka --branch 0.10.0 && cd libfranka && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF .. && cmake --build . && cpack -G DEB && dpkg -i libfranka*.deb 
 
-# Compile and install franka DGM project
+# Compile and install Franka DGM project
 RUN mkdir /root/data && cd /root/data && source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && git clone https://github.com/Rooholla-KhorramBakht/dgm_franka.git && cd dgm_franka && mkdir build && cd build && cmake .. && make -j"$(nproc)"
+
+# Clone and install Franka DGH project
+RUN git clone https://github.com/BolunDai0216/dgh_franka.git && cd dgh_franka &&  python3 -m pip install .
 
 # # Start the jupyter notebook 
 # CMD source /opt/ros/foxy/setup.bash && cd /root && source dgm-ws/install/setup.bash && export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3/dist-packages/ && jupyter notebook -y --no-browser --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password=''
