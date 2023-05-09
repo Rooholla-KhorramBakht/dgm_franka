@@ -1,4 +1,4 @@
-#include "dgm_fr3_dyn.hh"
+#include "dgm_fr3_joint_dyn.hh"
 
 namespace dynamic_graph_manager
 {
@@ -25,7 +25,7 @@ void DGMFrankaDyn::get_sensors_to_map(VectorDGMap& map)
   map["timestamp"][0] = franka_stamp_;
   map["joint_positions"] = Eigen::Map<Eigen::VectorXd>(robot_state_.q.data(), 7);
   map["joint_velocities"] = Eigen::Map<Eigen::VectorXd>(robot_state_.dq.data(), 7);
-  map["joint_torques"] = Eigen::Map<Eigen::VectorXd>(robot_state_.tau_J_d.data(), 7);
+  map["joint_torques"] = Eigen::Map<Eigen::VectorXd>(robot_state_.tau_J.data(), 7);
 }
 
 void DGMFrankaDyn::set_motor_controls_from_map(const VectorDGMap& map)

@@ -12,7 +12,7 @@
 #include <franka/model.h>
 #include <franka/rate_limiting.h>
 #include <franka/robot.h>
-#include "dgm_fr3_kin/dgm_fr3_kin.hh"
+#include "dgm_fr3_task_pose/dgm_fr3_task_pose.hh"
 #include "franka_trajectory_utils.hpp"
 #include "lcm/lcm-cpp.hpp"
 #include "ipc_trigger_t.hpp"
@@ -120,10 +120,11 @@ int main(int argc, char** argv)
     Eigen::VectorXd cmd(7);
     double control_stamp = 0;
 
-    // Define callback for control loop.
-    std::function<franka::JointVelocities(const franka::RobotState&, franka::Duration)> control_callback =
-        [&param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
-         &stamp_start](const franka::RobotState& state, franka::Duration /*period*/) -> franka::JointVelocities {
+    // Control callback
+
+    robot.control([=, &param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now, &stamp_start]
+    (const franka::RobotState& state, franka::Duration) -> franka::CartesianPose {
+      
       // Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
       std::chrono::duration<double> duration = stamp_now.time_since_epoch();  //- stamp_start;
@@ -143,36 +144,20 @@ int main(int argc, char** argv)
 
       // //How recent is the computed control command?
       double control_lag = duration.count() - control_stamp;
-      std::array<double, 7> vel_d_calculated;
-
       // Apply the control command to the robot only if the command is recent enough
+      std::array<double, 16> pose;
+
       if (abs(control_lag) < 0.1)
       {
-        // std::cout << 1 << std::endl;
-        for (size_t i = 0; i < 7; i++)
-        {
-          vel_d_calculated[i] = cmd(i);
-        }
+        for(int i=0; i<16; i++)
+          pose[i] = cmd(i);
       }
       else
       {
-        for (size_t i = 0; i < 7; i++)
-        {
-          vel_d_calculated[i] = 0;
-        }
+          pose = state.O_T_EE_c;
       }
-      // The following line is only necessary for printing the rate limited torque. As we activated
-      // rate limiting for the control loop (activated by default), the torque would anyway be
-      // adjusted!
-      std::array<double, 7> vel_d_rate_limited =
-          franka::limitRate(franka::kMaxJointVelocity, vel_d_calculated, state.dq_d);
-
-      // Send joint velocity command.
-      return vel_d_rate_limited;
-    };
-
-    // Start real-time control loop.
-    robot.control(control_callback);
+      return pose;
+    });
     // Start the dynamic graph thread
     dynamic_graph_manager::ros_spin();
   }

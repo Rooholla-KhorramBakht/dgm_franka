@@ -12,7 +12,7 @@
 #include <franka/model.h>
 #include <franka/rate_limiting.h>
 #include <franka/robot.h>
-#include "dgm_fr3_dyn/dgm_fr3_dyn.hh"
+#include "dgm_fr3_task_vel/dgm_fr3_task_vel.hh"
 #include "franka_trajectory_utils.hpp"
 #include "lcm/lcm-cpp.hpp"
 #include "ipc_trigger_t.hpp"
@@ -32,7 +32,7 @@ std::ostream& operator<<(std::ostream& ostream, const std::array<T, N>& array)
 }
 }  // anonymous namespace
 
-dynamic_graph_manager::DGMFrankaDyn dgm;
+dynamic_graph_manager::DGMFrankaKin dgm;
 
 void signal_callback_handler(int signum)
 {
@@ -120,13 +120,14 @@ int main(int argc, char** argv)
     Eigen::VectorXd cmd(7);
     double control_stamp = 0;
 
-    // Define callback for control loop.
-    std::function<franka::Torques(const franka::RobotState&, franka::Duration)> control_callback =
-        [&param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
-         &stamp_start](const franka::RobotState& state, franka::Duration /*period*/) -> franka::Torques {
+    // Control callback
+
+    robot.control([=, &param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now, &stamp_start]
+    (const franka::RobotState& state, franka::Duration) -> franka::CartesianVelocities {
+      
       // Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> duration = stamp_now.time_since_epoch();  // - stamp_start;
+      std::chrono::duration<double> duration = stamp_now.time_since_epoch();  //- stamp_start;
 
       // Send the sensor data to the DGM
       dgm.franka_update_sensors(state, duration.count());
@@ -143,41 +144,21 @@ int main(int argc, char** argv)
 
       // //How recent is the computed control command?
       double control_lag = duration.count() - control_stamp;
-
-      std::array<double, 7> tau_d_calculated;
-
       // Apply the control command to the robot only if the command is recent enough
-      if (control_lag < 0.1)
+      franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+      if (abs(control_lag) < 0.1)
       {
-        // std::cout << 1 << std::endl;
-        for (size_t i = 0; i < 7; i++)
-        {
-          tau_d_calculated[i] = cmd(i);
-        }
+        for(int i=0; i<6; i++)
+          output.O_dP_EE[i] = cmd(i);
       }
       else
       {
-        // std::cout << 0 << std::endl;
-        for (size_t i = 0; i < 7; i++)
-        {
-          tau_d_calculated[i] = 0;
-        }
+        for(int i=0; i<6; i++)
+          output.O_dP_EE[i] = 0;
       }
+      return output;
+    });
 
-      // Maybe I should remove the following to prevent hampered performance.
-
-      // The following line is only necessary for printing the rate limited torque. As we activated
-      // rate limiting for the control loop (activated by default), the torque would anyway be
-      // adjusted!
-      std::array<double, 7> tau_d_rate_limited =
-          franka::limitRate(franka::kMaxTorqueRate, tau_d_calculated, state.tau_J_d);
-
-      // Send torque command.
-      return tau_d_rate_limited;
-    };
-
-    // Start real-time control loop.
-    robot.control(control_callback);
     // Start the dynamic graph thread
     dynamic_graph_manager::ros_spin();
   }
