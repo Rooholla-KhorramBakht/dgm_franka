@@ -1,1 +1,1 @@
-sudo docker build -t robocaster/dgm-franka:amd64 .
+sudo docker build -t robocaster/dgm-franka:latest .
