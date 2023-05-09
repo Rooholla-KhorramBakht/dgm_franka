@@ -12,6 +12,7 @@ RUN apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-pinocchio pybin
 
 # Compile and Install LCM
 RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install
+RUN echo "export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.8/site-packages" > /root/.bashrc
 
 # Compile and Install Dynamic Graph Manager
 RUN python3 -m pip install treep lark catkin_pkg nose==1.3.7 empy
@@ -35,4 +36,6 @@ RUN git clone https://github.com/BolunDai0216/dgh_franka.git && cd dgh_franka &&
 # Install and start a VSCode server
 RUN cd /opt/ && wget https://github.com/coder/code-server/releases/download/v4.9.1/code-server_4.9.1_amd64.deb
 RUN dpkg -i /opt/code-server_4.9.1_amd64.deb && rm /opt/code-server_4.9.1_amd64.deb && rm -rf /var/lib/apt/lists/*
+# Install python related extensions
+RUN cat /home/dgm_franka/vscode-extensions.txt | xargs -n 1 code-server --install-extension
 CMD code-server  --auth none /root
