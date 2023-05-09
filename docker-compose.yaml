@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  dgm-franka:
+    image: robocaster/dgm-franka:latest
+    container_name: dgm-franka-container
+    network_mode: host
+    privileged: true
+    volumes:
+      - .:/root/host_dgm_franka
+    stdin_open: true
+    tty: true
