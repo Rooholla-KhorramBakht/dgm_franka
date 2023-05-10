@@ -24,7 +24,7 @@ RUN echo 'source /root/dgm-ws/install/setup.bash' >> ~/.bashrc
 WORKDIR /root
 RUN git clone --recursive https://github.com/frankaemika/libfranka --branch 0.10.0 && cd libfranka && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF .. && cmake --build . && cpack -G DEB && dpkg -i libfranka*.deb 
 
-# Compile and install Franka DGM project
+# Compile and install DGM Franka project
 RUN mkdir /root/data && cd /root/data && source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && git clone https://github.com/Rooholla-KhorramBakht/dgm_franka.git && cd dgm_franka && mkdir build && cd build && cmake .. && make -j"$(nproc)"
 
 # Clone and install Franka DGH project
@@ -37,5 +37,5 @@ RUN git clone https://github.com/Rooholla-KhorramBakht/dgh_franka.git && cd dgh_
 RUN cd /opt/ && wget https://github.com/coder/code-server/releases/download/v4.9.1/code-server_4.9.1_amd64.deb
 RUN dpkg -i /opt/code-server_4.9.1_amd64.deb && rm /opt/code-server_4.9.1_amd64.deb && rm -rf /var/lib/apt/lists/*
 # Install python related extensions
-RUN cat /home/dgm_franka/vscode-extensions.txt | xargs -n 1 code-server --install-extension
+RUN cat /root/dgm_franka/vscode-extensions.txt | xargs -n 1 code-server --install-extension
 CMD code-server  --auth none /root
