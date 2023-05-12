@@ -1,0 +1,3 @@
+[submodule "dgh_franka"]
+	path = dgh_franka
+	url = https://github.com/Rooholla-KhorramBakht/dgh_franka.git
