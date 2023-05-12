@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ros-foxy-rosidl
     libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose python3-pip libglib2.0-dev libxmu-dev libpoco-dev libeigen3-dev python-all-dev\
     curl unzip wget
 
-RUN python3 -m pip install scipy pyzmq matplotlib
-RUN apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-pinocchio pybind11-dev protobuf-compiler 
+RUN python3 -m pip install scipy pyzmq matplotlib pinocchio
+RUN apt-get install -y --no-install-recommends pybind11-dev protobuf-compiler 
 
 # Compile and Install LCM
 RUN cd /home/ && git clone https://github.com/lcm-proj/lcm.git && cd lcm && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install
@@ -25,7 +25,7 @@ WORKDIR /root
 RUN git clone --recursive https://github.com/frankaemika/libfranka --branch 0.10.0 && cd libfranka && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF .. && cmake --build . && cpack -G DEB && dpkg -i libfranka*.deb 
 
 # Compile and install DGM Franka project
-RUN mkdir /root/data && cd /root/data && source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && git clone https://github.com/Rooholla-KhorramBakht/dgm_franka.git && cd dgm_franka && mkdir build && cd build && cmake .. && make -j"$(nproc)"
+RUN mkdir /root/data && cd /root/data && source /opt/ros/foxy/setup.bash && source /root/dgm-ws/install/setup.bash && cd /root && git clone https://github.com/Rooholla-KhorramBakht/dgm_franka.git && cd dgm_franka && mkdir build && cd build && cmake .. && make -j"$(nproc)" && make install
 
 # Clone and install Franka DGH project
 RUN git clone https://github.com/Rooholla-KhorramBakht/dgh_franka.git && cd dgh_franka &&  python3 -m pip install .
@@ -38,4 +38,4 @@ RUN cd /opt/ && wget https://github.com/coder/code-server/releases/download/v4.9
 RUN dpkg -i /opt/code-server_4.9.1_amd64.deb && rm /opt/code-server_4.9.1_amd64.deb && rm -rf /var/lib/apt/lists/*
 # Install python related extensions
 RUN cat /root/dgm_franka/vscode-extensions.txt | xargs -n 1 code-server --install-extension
-CMD code-server  --auth none /root
+CMD code-server  --auth none /root/host_dgm_franka
