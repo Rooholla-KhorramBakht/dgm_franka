@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends ros-foxy-rosidl
     libedit-dev libtinyxml2-dev libyaml-cpp-dev ros-foxy-ament-cmake-nose python3-pip libglib2.0-dev libxmu-dev libpoco-dev libeigen3-dev python-all-dev\
     curl unzip wget
 
-RUN python3 -m pip install scipy pyzmq matplotlib pinocchio
+RUN python3 -m pip install scipy pyzmq matplotlib pin
 RUN apt-get install -y --no-install-recommends pybind11-dev protobuf-compiler 
 
 # Compile and Install LCM

@@ -62,3 +62,6 @@ install/
 
 # Python
 __pycache__
+
+# drafts
+dgh_franka.ipynb
