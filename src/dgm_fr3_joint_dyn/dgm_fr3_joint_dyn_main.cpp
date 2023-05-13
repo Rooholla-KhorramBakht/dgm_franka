@@ -17,8 +17,8 @@
 #include "lcm/lcm-cpp.hpp"
 #include "ipc_trigger_t.hpp"
 #include <signal.h>
-
 #include <chrono>
+#include "lcm_msgs/fr3_states/fr3_joint_state.hpp"
 namespace
 {
 template <class T, size_t N>
@@ -86,6 +86,7 @@ int main(int argc, char** argv)
   }
 
   exlcm::ipc_trigger_t trigger_msg;
+  fr3_states::fr3_joint_state lcm_joint_state_msg;
   trigger_msg.timestamp = 0;
 
   // Start communicating with the robot hardware initiate the controller loop

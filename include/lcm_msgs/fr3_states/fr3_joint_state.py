@@ -9,8 +9,8 @@ except ImportError:
     from io import BytesIO
 import struct
 
-class fr3_joint_kin(object):
-    __slots__ = ["timestamp", "q", "dq", "vel_cmd"]
+class fr3_joint_state(object):
+    __slots__ = ["timestamp", "q", "dq", "T"]
 
     __typenames__ = ["int64_t", "double", "double", "double"]
 
@@ -20,11 +20,11 @@ class fr3_joint_kin(object):
         self.timestamp = 0
         self.q = [ 0.0 for dim0 in range(7) ]
         self.dq = [ 0.0 for dim0 in range(7) ]
-        self.vel_cmd = [ 0.0 for dim0 in range(7) ]
+        self.T = [ 0.0 for dim0 in range(7) ]
 
     def encode(self):
         buf = BytesIO()
-        buf.write(fr3_joint_kin._get_packed_fingerprint())
+        buf.write(fr3_joint_state._get_packed_fingerprint())
         self._encode_one(buf)
         return buf.getvalue()
 
@@ -32,42 +32,42 @@ class fr3_joint_kin(object):
         buf.write(struct.pack(">q", self.timestamp))
         buf.write(struct.pack('>7d', *self.q[:7]))
         buf.write(struct.pack('>7d', *self.dq[:7]))
-        buf.write(struct.pack('>7d', *self.vel_cmd[:7]))
+        buf.write(struct.pack('>7d', *self.T[:7]))
 
     def decode(data):
         if hasattr(data, 'read'):
             buf = data
         else:
             buf = BytesIO(data)
-        if buf.read(8) != fr3_joint_kin._get_packed_fingerprint():
+        if buf.read(8) != fr3_joint_state._get_packed_fingerprint():
             raise ValueError("Decode error")
-        return fr3_joint_kin._decode_one(buf)
+        return fr3_joint_state._decode_one(buf)
     decode = staticmethod(decode)
 
     def _decode_one(buf):
-        self = fr3_joint_kin()
+        self = fr3_joint_state()
         self.timestamp = struct.unpack(">q", buf.read(8))[0]
         self.q = struct.unpack('>7d', buf.read(56))
         self.dq = struct.unpack('>7d', buf.read(56))
-        self.vel_cmd = struct.unpack('>7d', buf.read(56))
+        self.T = struct.unpack('>7d', buf.read(56))
         return self
     _decode_one = staticmethod(_decode_one)
 
     def _get_hash_recursive(parents):
-        if fr3_joint_kin in parents: return 0
-        tmphash = (0xe17553d5074d717e) & 0xffffffffffffffff
+        if fr3_joint_state in parents: return 0
+        tmphash = (0xe22883fb178c4740) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff) + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)
     _packed_fingerprint = None
 
     def _get_packed_fingerprint():
-        if fr3_joint_kin._packed_fingerprint is None:
-            fr3_joint_kin._packed_fingerprint = struct.pack(">Q", fr3_joint_kin._get_hash_recursive([]))
-        return fr3_joint_kin._packed_fingerprint
+        if fr3_joint_state._packed_fingerprint is None:
+            fr3_joint_state._packed_fingerprint = struct.pack(">Q", fr3_joint_state._get_hash_recursive([]))
+        return fr3_joint_state._packed_fingerprint
     _get_packed_fingerprint = staticmethod(_get_packed_fingerprint)
 
     def get_hash(self):
         """Get the LCM hash of the struct"""
-        return struct.unpack(">Q", fr3_joint_kin._get_packed_fingerprint())[0]
+        return struct.unpack(">Q", fr3_joint_state._get_packed_fingerprint())[0]
 

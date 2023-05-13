@@ -1,1 +1,1 @@
-sudo docker build -t robocaster/dgm-franka:latest .
+sudo docker build --no-cache -t robocaster/dgm-franka:latest .
