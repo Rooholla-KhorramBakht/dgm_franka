@@ -146,17 +146,32 @@ int main(int argc, char** argv)
       // //How recent is the computed control command?
       double control_lag = duration.count() - control_stamp;
       // Apply the control command to the robot only if the command is recent enough
-      franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+      std::array<double, 6> cmd_raw;
       if (abs(control_lag) < 0.1)
       {
         for(int i=0; i<6; i++)
-          output.O_dP_EE[i] = cmd(i);
+          cmd_raw[i] = cmd(i);
       }
       else
       {
         for(int i=0; i<6; i++)
-          output.O_dP_EE[i] = 0;
+          // output.O_dP_EE[i] = 0;
+          cmd_raw[i] = 0;
       }
+      // Limit the commanded velocity such that it is made to stay within limits
+      std::array<double, 6> limitted_vel_cmd =  franka::limitRate(
+                                                3.0,//franka::kMaxTranslationalVelocity,
+                                                9.0,//franka::kMaxTranslationalAcceleration, 
+                                                4500.0,//franka::kMaxTranslationalJerk, 
+                                                2.5,//franka::kMaxRotationalVelocity, 
+                                                17.0,//franka::kMaxRotationalAcceleration, 
+                                                8500.0,//franka::kMaxRotationalJerk, 
+                                                cmd_raw,         
+                                                state.O_dP_EE_c,    
+                                                state.O_ddP_EE_c);  
+      
+      franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+      output.O_dP_EE = limitted_vel_cmd;
       return output;
     });
 

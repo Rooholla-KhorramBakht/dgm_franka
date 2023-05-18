@@ -17,12 +17,8 @@
 #include "lcm/lcm-cpp.hpp"
 #include "ipc_trigger_t.hpp"
 #include <signal.h>
+
 #include <chrono>
-#include "lcm_msgs/fr3_states/fr3_joint_state.hpp"
-#include "lcm_msgs/fr3_commands/fr3_joint_cmd.hpp"
-#include <sys/select.h>
-
-
 namespace
 {
 template <class T, size_t N>
@@ -37,14 +33,12 @@ std::ostream& operator<<(std::ostream& ostream, const std::array<T, N>& array)
 }  // anonymous namespace
 
 dynamic_graph_manager::DGMFrankaDyn dgm;
-bool running = true;
 
 void signal_callback_handler(int signum)
 {
   //  std::cout << "Caught signal " << signum << std::endl;
   std::cout << "\nStopping the DGM and Leaving the application\n" << std::endl;
   dynamic_graph_manager::ros_shutdown();
-  running = false;
   exit(signum);
 }
 
@@ -56,30 +50,6 @@ void signal_callback_handler(int signum)
  * buffer that allows the Franka real-time system to be updated in time and adapt the rate of python
  * execution with the rate of high level control commands.
  */
-
-// LCM communication channel subsystem
-class LCMCommandHandler 
-{
-    public:
-        ~LCMCommandHandler() {}
-        uint64_t cmd_stamp;
-        double cmd_shm[7];
-        void handleMessage(const lcm::ReceiveBuffer* rbuf,
-                const std::string& chan, 
-                const fr3_commands::fr3_joint_cmd* msg)
-        {
-          memcpy(cmd_shm, msg->cmd, 7);
-          cmd_stamp = msg->timestamp;
-          std::cout << cmd_stamp << std::endl;
-        }
-};
-
-void lcmThreadFunc(lcm::LCM *lcm) {
-    while(running)
-    {
-      lcm->handle();
-    }
-}
 
 int main(int argc, char** argv)
 {
@@ -114,14 +84,8 @@ int main(int argc, char** argv)
     std::cout << "Can not initialize the LCM connection! " << yaml_params_file << std::endl;
     return -1;
   }
-  fr3_states::fr3_joint_state lcm_joint_state_msg;
-  LCMCommandHandler cmdShm;
-  lcm.subscribe(param["device"]["name"].as<std::string>() + "_command", &LCMCommandHandler::handleMessage, &cmdShm);
-  std::thread lcmThread(lcmThreadFunc, &lcm);
-
 
   exlcm::ipc_trigger_t trigger_msg;
-  
   trigger_msg.timestamp = 0;
 
   // Start communicating with the robot hardware initiate the controller loop
@@ -160,18 +124,10 @@ int main(int argc, char** argv)
     // Define callback for control loop.
     std::function<franka::Torques(const franka::RobotState&, franka::Duration)> control_callback =
         [&param, &trigger_msg, &lcm, &cmd, &control_stamp, &stamp_now,
-         &stamp_start, &lcm_joint_state_msg](const franka::RobotState& state, franka::Duration /*period*/) -> franka::Torques {
+         &stamp_start](const franka::RobotState& state, franka::Duration /*period*/) -> franka::Torques {
       // Get the current CPU time
       stamp_now = std::chrono::high_resolution_clock::now();
       std::chrono::duration<double> duration = stamp_now.time_since_epoch();  // - stamp_start;
-      
-      // load the LCM state message to be transmitted
-      lcm_joint_state_msg.timestamp=
-      std::chrono::duration_cast<std::chrono::microseconds>(stamp_now.time_since_epoch()).count();
-      memcpy(lcm_joint_state_msg.q, state.q.data(), 7);
-      memcpy(lcm_joint_state_msg.dq, state.dq.data(), 7);
-      memcpy(lcm_joint_state_msg.T, state.tau_J.data(), 7);
-      lcm.publish(param["device"]["name"].as<std::string>() + "_states", &lcm_joint_state_msg);
 
       // Send the sensor data to the DGM
       dgm.franka_update_sensors(state, duration.count());
